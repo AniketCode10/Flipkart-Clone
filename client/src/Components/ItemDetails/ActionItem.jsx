@@ -61,7 +61,7 @@ const ActionItem = () => {
 
   const addItemToCart = () => {
     dispatch(addToCart(id, quantity));
-    toast.success("Item Removed from Cart",{
+    toast.success("Item Added from Cart",{
         position: "top-center",
   autoClose: 5000,
   hideProgressBar: false,
