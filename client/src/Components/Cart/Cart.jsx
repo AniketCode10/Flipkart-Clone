@@ -93,9 +93,9 @@ return lastPrice;
 const checkoutHandler = async(amount)=>{
 
 
-        const {data:{key}}= await axios.get("https://flipkart-backend-dge6.onrender.com/getkey")
+        const {data:{key}}= await axios.get("https://flipkart-backend-j2ae.onrender.com/getkey")
 
-        const {data:{order}} = await axios.post("https://flipkart-backend-dge6.onrender.com/api/checkout",{
+        const {data:{order}} = await axios.post("https://flipkart-backend-j2ae.onrender.com/api/checkout",{
             amount
         })
         
