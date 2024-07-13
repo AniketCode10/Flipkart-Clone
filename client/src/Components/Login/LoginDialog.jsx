@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, TextField, Box, Button, Typography, styled } from '@mui/material';
 
 import { authenticateLogin, authenticateSignup } from '../../service/api';
+import { Bounce, Flip, toast } from 'react-toastify';
 
 const Component = styled(DialogContent)`
     height: 70vh;
@@ -126,6 +127,17 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
             showError(false);
             handleClose();
             setAccount(login.username);
+            toast.success("Logged in Successfully",{
+                position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition:Flip,
+              })
         }
     }
 
@@ -134,6 +146,17 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
         if(!response) return;
         handleClose();
         setAccount(signup.username);
+        toast.success("Registered and Logged In Sucessfully",{
+            position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+          })
     }
     
     const toggleSignup = () => {
@@ -158,7 +181,7 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
                         <Wrapper>
                             <TextField variant="standard" onChange={(e) => onValueChange(e)} name='username' label='Enter Email/Mobile number' />
                             { error && <Error>Please enter valid Email ID/Mobile number</Error> }
-                            <TextField variant="standard" onChange={(e) => onValueChange(e)} name='password' label='Enter Password' />
+                            <TextField variant="standard" onChange={(e) => onValueChange(e)} name='password' type='password' label='Enter Password' />
                             <Text>By continuing, you agree to Flipkart's Terms of Use and Privacy Policy.</Text>
                             <LoginButton onClick={() => loginUser()} >Login</LoginButton>
                             <Text style={{textAlign:'center'}}>OR</Text>
@@ -169,9 +192,9 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
                             <TextField variant="standard" onChange={(e) => onInputChange(e)} name='firstname' label='Enter Firstname' />
                             <TextField variant="standard" onChange={(e) => onInputChange(e)} name='lastname' label='Enter Lastname' />
                             <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Username' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' label='Enter Email' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='password' label='Enter Password' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' type="email" label='Enter Email' />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='password' type="password" label='Enter Password' />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' type="number" />
                             <LoginButton onClick={() => signupUser()} >Continue</LoginButton>
                         </Wrapper>
                     }
