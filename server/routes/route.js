@@ -2,7 +2,7 @@ import express from  'express';
 import { getProductById, getProducts } from '../controller/product-controller.js';
 import { userSignUp, userLogIn } from '../controller/user-controller.js';
 import { paymentCtrl, paymentVerification } from '../controller/payment-controller.js';
-// import { addItemInCart } from '../controller/cart-controller.js';
+
 
 
 const router = express.Router();
