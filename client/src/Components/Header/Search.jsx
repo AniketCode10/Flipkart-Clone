@@ -41,7 +41,8 @@ const Search = () => {
 
     const getText = (text) => {
         setText(text);
-        setOpen(false)
+        setOpen(false);
+        // setText("");
     }
 
     const getProducts = useSelector(state => state.getProducts);

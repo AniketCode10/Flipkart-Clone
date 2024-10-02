@@ -122,7 +122,7 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
     const loginUser = async() => {
         let response = await authenticateLogin(login);
         if(!response) 
-            showError(true);
+            toast.error("Invalid Credentials");
         else {
             showError(false);
             handleClose();
@@ -140,10 +140,27 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
               })
         }
     }
+    // const checkGmail =()=>{
+    //     if(){
+           
+    //     }
+       
+    // }
+    
+    
 
     const signupUser = async() => {
+        
         let response = await authenticateSignup(signup);
-        if(!response) return;
+        if(!response){
+            toast.error("Invalid User Credentials");
+        }
+        // else if(!setSignup.email.trim().toLowerCase().indexOf('@gmail.com') !== -1 && 
+        // email.trim().toLowerCase().slice(-10) === '@gmail.com'){
+        //     toast.warning("Invalid Email!!");
+        // }
+        else{
+            showError(false);
         handleClose();
         setAccount(signup.username);
         toast.success("Registered and Logged In Sucessfully",{
@@ -157,6 +174,8 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
       theme: "colored",
       transition: Bounce,
           })
+
+        }
     }
     
     const toggleSignup = () => {
@@ -167,6 +186,15 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
         setOpen(false);
         toggleAccount(accountInitialValues.login);
     }
+    const [email, setEmail] = useState('');
+  
+    // const validateEmail = (email) => {
+    //     // Basic regex for email validation
+    //     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     return regex.test(email);
+    // };
+
+
 
     return (
         <Dialog open={open} onClose={handleClose} PaperProps={{ sx: { maxWidth: 'unset' } }}>
@@ -184,18 +212,20 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
                             <TextField variant="standard" onChange={(e) => onValueChange(e)} name='password' type='password' label='Enter Password' />
                             <Text>By continuing, you agree to Flipkart's Terms of Use and Privacy Policy.</Text>
                             <LoginButton onClick={() => loginUser()} >Login</LoginButton>
-                            <Text style={{textAlign:'center'}}>OR</Text>
-                            <RequestOTP>Request OTP</RequestOTP>
+                            {/* <Text style={{textAlign:'center'}}>OR</Text> */}
+                            {/* <RequestOTP>Request OTP</RequestOTP> */}
                             <CreateAccount onClick={() => toggleSignup()}>New to Flipkart? Create an account</CreateAccount>
                         </Wrapper> : 
                         <Wrapper>
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='firstname' label='Enter Firstname' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='lastname' label='Enter Lastname' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Username' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' type="email" label='Enter Email' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='password' type="password" label='Enter Password' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' type="number" />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='firstname' label='Enter Firstname' required/>
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='lastname' label='Enter Lastname' required />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Username' required/>
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} 
+              name='email' type="email"  label='Enter Email' required />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='password' type="password" label='Enter Password' required />
+                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' type="number" required/>
                             <LoginButton onClick={() => signupUser()} >Continue</LoginButton>
+                          
                         </Wrapper>
                     }
                 </Box>

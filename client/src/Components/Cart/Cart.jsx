@@ -1,4 +1,13 @@
-import { useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+// import { Dialog, Transition } from "@headlessui/react";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    
+} from '@mui/material';
 
 import { Box, Typography, Button, Grid, styled } from '@mui/material';
 import { useParams } from 'react-router-dom';
@@ -10,8 +19,23 @@ import TotalView from './TotalView';
 import EmptyCart from './EmptyCart';
 import CartItem from './CartItem';
 import { Bounce, toast } from 'react-toastify';
+import { Fragment } from 'react';
+import { LoginContext } from '../../context/ContextProvider';
 
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+    backgroundColor: '#2874f0', // Flipkart blue
+    color: '#ffffff',
+}));
 
+const StyleButton = styled(Button)(({ theme }) => ({
+    backgroundColor: '#fb641b', // Flipkart yellow
+    color: '#fff',
+    width: '120px',
+    height: '41px',
+    '&:hover': {
+        backgroundColor: '#ffcc00', // Darker yellow on hover
+    },
+}));
 
 const Component = styled(Grid)(({ theme }) => ({
     padding: '30px 135px',
@@ -51,6 +75,60 @@ const StyledButton = styled(Button)`
 `;
 
 const Cart = () => {
+
+        // let [isOpen, setIsOpen] = useState(false);
+
+        // function closeModal() {
+        //   setIsOpen(false);
+        // }
+      
+        // function openModal() {
+        //   setIsOpen(true);
+        // }
+        const [open, setOpen] = useState(false);
+        const [formData, setFormData] = useState({
+            name: '',
+            address: '',
+            phone: '',
+            pincode: '',
+        });
+        const [errors, setErrors] = useState({}); // To hold error messages
+    
+        const handleClickOpen = () => {
+            setOpen(true);
+        };
+    
+        const handleClose = () => {
+            setOpen(false);
+            setFormData({ name: '', address: '', phone: '', pincode: '' }); // Reset form data
+            setErrors({}); // Reset errors
+        };
+    
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            setFormData({ ...formData, [name]: value });
+            setErrors({ ...errors, [name]: '' }); // Clear error for the current field
+        };
+    
+        const validateFields = () => {
+            const newErrors = {};
+            for (const key in formData) {
+                if (!formData[key]) {
+                    newErrors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
+                }
+            }
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0; // Return true if no errors
+        };
+    
+        const handleConfirm = () => {
+            if (validateFields()) {
+                // Handle the confirm action (e.g., form submission)
+                console.log(formData);
+                handleClose();
+            }
+        };
+
     const cartDetails = useSelector(state => state.cart);
     const { cartItems } = cartDetails;
     const { id } = useParams();
@@ -139,7 +217,24 @@ const checkoutHandler = async(amount)=>{
 
 
     }
+    const { account, setAccount } = useContext(LoginContext);
+
+    const  checkLogin = ()=>{
+
+        if(!account){
+            toast.error("Please Login to Proceed");
+        }else{
+            handleClickOpen();
+        }
+    }
     
+    // const bothEvents = ()=>{
+    //   checkLogin();
+    //     if(checkLogin()){ 
+    //         handleClickOpen()
+    //     }
+        
+    // }
 
     return (
         <>
@@ -154,14 +249,82 @@ const checkoutHandler = async(amount)=>{
                             ))
                         }
                     <BottomWrapper>
-                        <StyledButton onClick={() => checkoutHandler(totalAmount())} variant="contained">Place Order</StyledButton>
+                        {/* <StyledButton onClick={() => checkoutHandler(totalAmount())} variant="contained">Place Order</StyledButton> */}
+                        <StyledButton onClick={()=>checkLogin()} variant="contained">Place Order</StyledButton>
                     </BottomWrapper>
                 </LeftComponent>
                 <Grid item lg={3} md={3} sm={12} xs={12}>
                     <TotalView cartItems={cartItems} />
                 </Grid>
+                <Dialog open={open} onClose={handleClose}>
+                <StyledDialogTitle>Enter Your Delivery Credentials</StyledDialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        name="name"
+                        label="Full Name"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        value={formData.name}
+                        onChange={handleChange}
+                        error={!!errors.name}
+                        helperText={errors.name}
+                        required
+                    />
+                    <TextField
+                        margin="dense"
+                        name="address"
+                        label="Address"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        value={formData.address}
+                        onChange={handleChange}
+                        error={!!errors.address}
+                        helperText={errors.address}
+                        required
+                    />
+                    <TextField
+                        margin="dense"
+                        name="phone"
+                        label="Phone Number"
+                        type="number"
+                        fullWidth
+                        variant="outlined"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        error={!!errors.phone}
+                        helperText={errors.phone}
+                        required
+                    />
+                    <TextField
+                        margin="dense"
+                        name="pincode"
+                        label="Pincode"
+                        type="number"
+                        fullWidth
+                        variant="outlined"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        error={!!errors.pincode}
+                        helperText={errors.pincode}
+                        required
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <StyleButton  onClick={() => checkoutHandler(totalAmount())} disabled={Object.values(formData).some(x => x === '')}>
+                        Confirm
+                    </StyleButton>
+                </DialogActions>
+            </Dialog>
             </Component> : <EmptyCart />
         }
+  
         </>
 
     )

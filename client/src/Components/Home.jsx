@@ -31,23 +31,23 @@ const Home = () => {
             <NavBar />
             <Component>
                 <Banner />
-                <MidSlide products={products} />
+                <MidSlide products={products.slice(0,7)} />
                 <MidSection />
                 <Slide
-                    data={products} 
+                    data={products.slice(7,13)} 
                     title='Discounts for You'
                     timer={false} 
                     multi={true} 
                 />
                 <Slide
-                    data={products} 
+                    data={products.slice(13,20)} 
                     title='Suggested Items'
                     timer={false} 
                     multi={true} 
                 />
                 <Slide
-                    data={products} 
-                    title='Top Selection'
+                    data={products.slice(20,30)} 
+                    title='Top Sarees'
                     timer={false} 
                     multi={true} 
                 />
