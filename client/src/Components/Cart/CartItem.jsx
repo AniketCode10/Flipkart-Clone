@@ -47,7 +47,7 @@ const CartItem = ({ item, removeItemFromCart }) => {
         <Component>
             <LeftComponent>
                 <img src={item.url} style={{ height: 110, width: 110 }} />
-                <GroupButton />
+                {/* <GroupButton /> */}
             </LeftComponent>
             <Box style={{ margin: 20 }}>
                 <Typography>{addEllipsis(item.title.longTitle)}</Typography>
